@@ -1,2 +1,2 @@
 # LP2-FinalWork
-Final work for the class of "Linguagens de Programação 2" at UFRGS
+Final work for the class "Linguagens de Programação 2" at UFRGS
