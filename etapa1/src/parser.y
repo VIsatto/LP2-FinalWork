@@ -411,7 +411,9 @@ expr
     | expr TK_OC_AND expr
         {
             /* TODO-C-1: substitua NULL pelo nó correto */
-            $$ = NULL;  /* <-- INCOMPLETO: crie o nó AST_EXPR_BINARY aqui */
+            $$ = ast_new(AST_EXPR_BINARY, "&&", yylineno);
+            $$->children[0] = $1; $$->children[1] = $3;
+
             /* Dica: $$ = ast_new(AST_EXPR_BINARY, "&&", yylineno);
              *        $$->children[0] = $1;
              *        $$->children[1] = $3;          */
@@ -419,7 +421,8 @@ expr
     | expr TK_OC_OR expr
         {
             /* TODO-C-2: substitua NULL pelo nó correto */
-            $$ = NULL;  /* <-- INCOMPLETO: crie o nó AST_EXPR_BINARY aqui */
+            $$ = ast_new(AST_EXPR_BINARY,"||",yylineno);
+            $$ -> children[0] = $1; $$->children[1] = $3;
         }
 
     /* Operador unário de negação lógica */
@@ -493,8 +496,10 @@ expr_list
  */
 expr_list_ne
     : expr
-        { $$ = $1; }
+        { $$ = $1; } |
+      expr_list_ne ',' expr {$$ = ast_append($1,$3);}
     /* TODO-D: adicione aqui a regra para lista com múltiplos argumentos */
+
     ;
 
 /* ------- lvalue (lado esquerdo de atribuição) ------- */
