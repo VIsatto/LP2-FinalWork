@@ -1,5 +1,0 @@
-/* Falta ; no final do comando */
-fun void main() {
-    let x := 10
-    print x ;
-}
