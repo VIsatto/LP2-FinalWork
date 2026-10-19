@@ -223,7 +223,7 @@ bool_result_t codegen_bool_expr(codegen_ctx_t *ctx, ast_node_t *expr)
             res.true_list  = patch_list_merge(r1.true_list, r2.true_list);
             res.false_list = r2.false_list;
             free(lmid);
-            patch_list_free(r1.true_list);
+            patch_list_free(r1.false_list);
 
         }
     } else {
