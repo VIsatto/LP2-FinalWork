@@ -395,9 +395,26 @@ void codegen_stmt(codegen_ctx_t *ctx, ast_node_t *stmt)
          *   Emite goto lbegin
          *   Preenche cond.false_list → emite lend
          * --------------------------------------------------------------- */
-        case AST_WHILE:
-            fprintf(stderr, "[CODEGEN] TODO-E3-C: while não implementado.\n");
+        case AST_WHILE: {
+            char *lbegin = tac_new_label();
+            codegen_emit(ctx, TAC_LABEL, lbegin, NULL, NULL);
+            bool_result_t cond = codegen_bool_expr(ctx, stmt->children[0]);
+            char *lbody = tac_new_label();
+            patch_list_backpatch(cond.true_list, lbody);
+            codegen_emit(ctx, TAC_LABEL, lbody, NULL, NULL);
+            codegen_stmt(ctx, stmt->children[1]);
+            codegen_emit(ctx, TAC_JUMP, lbegin, NULL, NULL);
+            char *lend = tac_new_label();
+            patch_list_backpatch(cond.false_list, lend);
+            codegen_emit(ctx, TAC_LABEL, lend, NULL, NULL);
+
+            free(lbegin);
+            free(lbody);
+            free(lend);
+            patch_list_free(cond.true_list);
+            patch_list_free(cond.false_list);
             break;
+        }
 
         /* ---------------------------------------------------------------
          * TODO-E3-D: for
